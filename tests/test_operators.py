@@ -26,7 +26,7 @@ from minitorch.operators import (
 )
 
 from .strategies import assert_close, small_floats
-
+from math import fabs
 # ## Task 0.1 Basic hypothesis tests.
 
 
@@ -108,7 +108,10 @@ def test_sigmoid(a: float) -> None:
     * It is  strictly increasing.
     """
     # TODO: Implement for Task 0.2.
-    raise NotImplementedError("Need to implement for Task 0.2")
+    assert sigmoid(a-a) == 1/2
+    assert sigmoid(a) >= 0
+    assert fabs(1 - sigmoid(a) - sigmoid(-a)) <= 1e-6 
+    assert sigmoid(-fabs(a) - 3) < sigmoid(fabs(a) + 2)
 
 
 @pytest.mark.task0_2
@@ -116,8 +119,7 @@ def test_sigmoid(a: float) -> None:
 def test_transitive(a: float, b: float, c: float) -> None:
     "Test the transitive property of less-than (a < b and b < c implies a < c)"
     # TODO: Implement for Task 0.2.
-    raise NotImplementedError("Need to implement for Task 0.2")
-
+    assert a < c if a < b and b < c else 1  
 
 @pytest.mark.task0_2
 def test_symmetric() -> None:
@@ -126,7 +128,10 @@ def test_symmetric() -> None:
     gives the same value regardless of the order of its input.
     """
     # TODO: Implement for Task 0.2.
-    raise NotImplementedError("Need to implement for Task 0.2")
+    assert mul(1,2) == mul(2,1)
+    assert mul(0,1) == mul(1,0)
+    assert mul(-2,1) == mul(1,-2)
+    assert mul(-2,-4) == mul(-4,-2)
 
 
 @pytest.mark.task0_2
@@ -136,7 +141,11 @@ def test_distribute() -> None:
     :math:`z \times (x + y) = z \times x + z \times y`
     """
     # TODO: Implement for Task 0.2.
-    raise NotImplementedError("Need to implement for Task 0.2")
+    assert mul(4, add(2,3)) == add(mul(4,2), mul (4,3))
+    assert mul(-4, add(2,3)) == add(mul(-4,2), mul (-4,3))
+    assert mul(0, add(2,3)) == add(mul(0,2), mul (0,3))
+    assert mul(4, add(-2,3)) == add(mul(4,-2), mul (4,3))
+    assert mul(4, add(-3,3)) == add(mul(4,-3), mul (4,3)) 
 
 
 @pytest.mark.task0_2
@@ -145,7 +154,13 @@ def test_other() -> None:
     Write a test that ensures some other property holds for your functions.
     """
     # TODO: Implement for Task 0.2.
-    raise NotImplementedError("Need to implement for Task 0.2")
+    assert add(add(3,4), add(5,6)) == add(add(6,4), add(5,3))
+    assert add(add(0,4), add(0,6)) == add(4,6)
+    assert add(add(0,4), add(0,6)) == add(4,6)
+    assert add( id(3), id(3)) == mul(2, id(3))
+    assert add(add(3,3),add(3,3)) == mul(4,3)
+    assert neg(4) == -4
+    assert neg(0) == -neg(0)
 
 
 # ## Task 0.3  - Higher-order functions
@@ -174,8 +189,14 @@ def test_sum_distribute(ls1: List[float], ls2: List[float]) -> None:
     is the same as the sum of each element of `ls1` plus each element of `ls2`.
     """
     # TODO: Implement for Task 0.3.
-    raise NotImplementedError("Need to implement for Task 0.3")
+    sum_1 = 0
+    sum_2 = 0
 
+    for i in ls1+ls2:
+        sum_2 = add(sum_2, i)
+    for i in addLists(ls1,ls2):
+        sum_1 = i + sum_1
+    assert fabs(sum_2 - sum_1) <= 1e-6 
 
 @pytest.mark.task0_3
 @given(lists(small_floats))
