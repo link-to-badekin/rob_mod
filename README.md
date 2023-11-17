@@ -7,3 +7,13 @@
 * Docs: https://minitorch.github.io/
 
 * Overview: https://minitorch.github.io/module0.html
+
+# Task 0.5
+
+Для модели "Linear" и набора данных "Simple" были использованы параметры (-10,1.88,3.61):
+
+<img src="media/liner_final.png" width="50%px">
+
+Для модели "Network" и набора данных "Simple" были использованы параметры (4,0.1,625):
+
+<img src="media/net.png" width="50%px">
